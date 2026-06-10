@@ -652,6 +652,46 @@ export interface ApiServicioServicio extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiSolicitudSolicitud extends Struct.CollectionTypeSchema {
+  collectionName: 'solicitudes';
+  info: {
+    displayName: 'Solicitud';
+    pluralName: 'solicitudes';
+    singularName: 'solicitud';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    correoSolicitante: Schema.Attribute.Email & Schema.Attribute.Required;
+    correoUsuario: Schema.Attribute.Email & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    descripcionProyecto: Schema.Attribute.Text & Schema.Attribute.Required;
+    estado: Schema.Attribute.Enumeration<['Pendiente', 'Respondida']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'Pendiente'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::solicitud.solicitud'
+    > &
+      Schema.Attribute.Private;
+    nombreSolicitante: Schema.Attribute.String & Schema.Attribute.Required;
+    observacion: Schema.Attribute.Text;
+    programer: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::programer.programer'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    uid: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -1167,6 +1207,7 @@ declare module '@strapi/strapi' {
       'api::programer.programer': ApiProgramerProgramer;
       'api::project.project': ApiProjectProject;
       'api::servicio.servicio': ApiServicioServicio;
+      'api::solicitud.solicitud': ApiSolicitudSolicitud;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;
